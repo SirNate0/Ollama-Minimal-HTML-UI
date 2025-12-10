@@ -70,14 +70,17 @@ async function doChat({ addUser = false } = {}) {
     }
   }
 
+  // Get the content div (created by createEntry)
+  const contentDiv = assistantEl.querySelector('.history-content');
+
   // Initialize the streaming buffer `answer` with any existing assistant content
   if (assistantIndex !== -1) {
     answer = window.chat_history[assistantIndex].content || "";
     try {
       // ensure the DOM reflects existing content before appending
-      if (assistantEl) assistantEl.innerHTML = markdown.render(answer);
+      if (contentDiv) contentDiv.innerHTML = markdown.render(answer);
     } catch (e) {
-      if (assistantEl) assistantEl.innerText = answer;
+      if (contentDiv) contentDiv.innerText = answer;
     }
   }
 
@@ -101,9 +104,6 @@ async function doChat({ addUser = false } = {}) {
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf-8");
     let accumulatedData = "";
-
-    // Get the content div (created by createEntry)
-    const contentDiv = assistantEl.querySelector('.history-content');
 
     while (true) {
       const { done, value } = await reader.read();
