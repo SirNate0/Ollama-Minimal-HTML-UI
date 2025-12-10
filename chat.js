@@ -7,8 +7,8 @@ const stopButton = document.getElementById("stop-button");
 // We'll no longer use the separate `current-response` bubble for streaming.
 const responseContainer = document.getElementById("current-response");
 const errorContainer = document.getElementById("error-container");
-const historyContainer = document.getElementById("history");
-const chatScroll = document.getElementById("chat-scroll");
+// `historyContainer` and `chatScroll` are defined in `chat-history.js` and
+// must not be redeclared here. We reference them below.
 
 async function doChat({ addUser = false } = {}) {
   const ipAddress = document.getElementById("ip-address").value;
