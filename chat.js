@@ -106,6 +106,15 @@ async function doChat({ addUser = false } = {}) {
     const decoder = new TextDecoder("utf-8");
     let accumulatedData = "";
 
+    // Update only the content div, preserving controls and other structure
+    let contentDiv = assistantEl.querySelector('.history-content');
+    if (!contentDiv) {
+      // First time: create the content div if it doesn't exist
+      contentDiv = document.createElement('div');
+      contentDiv.classList.add('history-content');
+      assistantEl.appendChild(contentDiv);
+    }
+
     while (true) {
       const { done, value } = await reader.read();
 
@@ -134,9 +143,9 @@ async function doChat({ addUser = false } = {}) {
       if (assistantIndex !== -1) {
         window.chat_history[assistantIndex].content = answer;
         try {
-          assistantEl.innerHTML = markdown.render(answer);
+          contentDiv.innerHTML = markdown.render(answer);
         } catch (e) {
-          assistantEl.innerText = answer;
+          contentDiv.innerText = answer;
         }
       } else {
         // Fallback: show in responseContainer
