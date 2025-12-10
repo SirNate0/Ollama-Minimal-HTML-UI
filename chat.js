@@ -85,7 +85,7 @@ async function doChat({ addUser = false } = {}) {
 
     // If we have any text produced, add as assistant message (partial or full)
     if (answer && answer.trim().length > 0) {
-      window.addResponse(answer);
+      window.addResponse(answer, { append: !addUser });
     } else if (!aborted) {
       // nothing produced and not aborted -> do nothing
     }
