@@ -11,11 +11,20 @@ const errorContainer = document.getElementById("error-container");
 // must not be redeclared here. We reference them below.
 
 async function doChat({ addUser = false } = {}) {
-  const ipAddress = document.getElementById("ip-address").value;
-  const modelName = document.getElementById("model-name").value;
+  const ipAddress = document.getElementById("ip-address").value.trim();
+  const modelName = document.getElementById("model-name").value.trim();
   const promptEl = document.querySelector("#question-form textarea");
 
   errorContainer.innerText = null;
+
+  // Validate that the server IP and model are present. If not, show error and abort.
+  if (!ipAddress || !modelName) {
+    errorContainer.innerText = "Please set both the server IP and model before generating.";
+    // ensure buttons reflect valid state
+    updateControlsState();
+    return;
+  }
+
   submitButton.disabled = true;
   continueButton.disabled = true;
   stopButton.disabled = false;
@@ -190,3 +199,34 @@ stopButton.addEventListener("click", (e) => {
 
 // initial state
 stopButton.disabled = true;
+
+// Enable/disable Submit and Continue based on whether IP and model are set
+function updateControlsState() {
+  const ip = document.getElementById('ip-address').value.trim();
+  const model = document.getElementById('model-name').value.trim();
+  const enabled = Boolean(ip && model);
+  // Only enable submit/continue when not currently streaming (stopButton indicates streaming)
+  if (stopButton && !stopButton.disabled) {
+    // streaming in progress, keep submit/continue disabled
+    submitButton.disabled = true;
+    continueButton.disabled = true;
+  } else {
+    submitButton.disabled = !enabled;
+    continueButton.disabled = !enabled;
+  }
+}
+
+// Wire up input listeners to keep controls in sync
+document.getElementById('ip-address').addEventListener('input', updateControlsState);
+document.getElementById('model-name').addEventListener('input', updateControlsState);
+const modelDropdown = document.getElementById('model-dropdown');
+if (modelDropdown) {
+  modelDropdown.addEventListener('change', () => {
+    const selected = modelDropdown.value;
+    if (selected) document.getElementById('model-name').value = selected;
+    updateControlsState();
+  });
+}
+
+// Initialize control state on load
+updateControlsState();

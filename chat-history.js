@@ -126,8 +126,9 @@ function startInlineEdit(index, entryEl, contentDiv) {
   ta.style.width = '100%';
   ta.value = original;
 
-  // compact control buttons
+  // compact control buttons (editor-specific)
   const btnBar = document.createElement('div');
+  btnBar.classList.add('inline-editor-controls');
   btnBar.style.display = 'inline-flex';
   btnBar.style.gap = '8px';
   btnBar.style.marginTop = '6px';
@@ -174,6 +175,10 @@ function startInlineEdit(index, entryEl, contentDiv) {
   btnBar.appendChild(cancelBtn);
   btnBar.appendChild(forkBtn);
 
+  // hide the original controls while editing
+  const originalControls = entryEl.querySelector('.history-controls');
+  if (originalControls) originalControls.style.display = 'none';
+
   // replace contentDiv with textarea and btnBar visually
   contentDiv.innerHTML = '';
   contentDiv.appendChild(ta);
@@ -183,12 +188,14 @@ function startInlineEdit(index, entryEl, contentDiv) {
   ta.focus();
 
   function cleanupEditor() {
-    // remove textarea and buttons (rendered content already set)
+    // remove textarea and editor buttons, then restore original controls
     const taIn = entryEl.querySelector('textarea');
     if (taIn && taIn.parentNode) taIn.parentNode.removeChild(taIn);
-    const bar = entryEl.querySelector('div[style]');
-    if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
-    // re-insert contentDiv rendered (already set above)
+    const editorBar = entryEl.querySelector('.inline-editor-controls');
+    if (editorBar && editorBar.parentNode) editorBar.parentNode.removeChild(editorBar);
+    const originalControls = entryEl.querySelector('.history-controls');
+    if (originalControls) originalControls.style.display = '';
+    // contentDiv already contains the rendered content (set by caller)
   }
 }
 
