@@ -59,7 +59,8 @@ function createEntry(item, idx) {
 
   const editBtn = document.createElement("button");
   editBtn.type = "button";
-  editBtn.innerText = "Edit";
+  editBtn.innerText = "🖉"; // pencil icon
+  editBtn.title = "Edit";
   editBtn.addEventListener("click", () => startInlineEdit(idx, entry, contentDiv));
   controls.appendChild(editBtn);
 
@@ -145,7 +146,8 @@ function startInlineEdit(index, entryEl, contentDiv) {
 
   const saveBtn = document.createElement('button');
   saveBtn.type = 'button';
-  saveBtn.innerText = 'Save';
+  saveBtn.innerText = '🗹';
+  saveBtn.title = 'Save';
   saveBtn.addEventListener('click', () => {
     window.chat_history[index].content = ta.value;
     // re-render content
@@ -160,7 +162,8 @@ function startInlineEdit(index, entryEl, contentDiv) {
 
   const cancelBtn = document.createElement('button');
   cancelBtn.type = 'button';
-  cancelBtn.innerText = 'Cancel';
+  cancelBtn.innerText = '🗷';
+  cancelBtn.title = 'Cancel';
   cancelBtn.addEventListener('click', () => {
     // restore original render
     try {
@@ -173,7 +176,8 @@ function startInlineEdit(index, entryEl, contentDiv) {
 
   const forkBtn = document.createElement('button');
   forkBtn.type = 'button';
-  forkBtn.innerText = 'Fork';
+  forkBtn.innerText = '⅄';
+  forkBtn.title = 'Fork';
   forkBtn.addEventListener('click', () => {
     // create a fork with the history up through this message (inclusive),
     // and include the in-progress edit value. This slices off any messages after this bubble.

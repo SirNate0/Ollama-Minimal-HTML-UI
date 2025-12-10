@@ -61,6 +61,27 @@ h1 {
   flex-direction: column;
 }
 
+/* Compact icon buttons used in inline editor and per-message controls */
+.history-controls button,
+.inline-editor-controls button {
+  padding: 6px;
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 14px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-controls button {
+  background: rgba(255,255,255,0.03);
+}
+
+.inline-editor-controls button {
+  background: rgba(255,255,255,0.06);
+}
+
 /* Default button style */
 button {
   padding: 10px;
