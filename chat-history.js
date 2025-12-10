@@ -261,10 +261,6 @@ function loadFromFragment() {
   }
 }
 
-// initial render/load
-loadFromFragment();
-renderFullHistory();
-
 // Export chat history (and current settings) as JSON file
 function exportChatJSON() {
   try {
@@ -332,3 +328,10 @@ if (importBtn && importFileInput) {
     importFileInput.value = null;
   });
 }
+
+// Render chat history on page load
+document.addEventListener('DOMContentLoaded', () => {
+  loadFromFragment();
+  //renderFullHistory(); already done in loadFromFragment
+});
+
