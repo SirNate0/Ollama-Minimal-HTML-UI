@@ -65,6 +65,17 @@ async function doChat({ addUser = false } = {}) {
     }
   }
 
+  // Initialize the streaming buffer `answer` with any existing assistant content
+  if (assistantIndex !== -1) {
+    answer = window.chat_history[assistantIndex].content || "";
+    try {
+      // ensure the DOM reflects existing content before appending
+      if (assistantEl) assistantEl.innerHTML = markdown.render(answer);
+    } catch (e) {
+      if (assistantEl) assistantEl.innerText = answer;
+    }
+  }
+
   // Ensure the new/updated assistant element is visible
   try {
     if (chatScroll) chatScroll.scrollTop = chatScroll.scrollHeight;
