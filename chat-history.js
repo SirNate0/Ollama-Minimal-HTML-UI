@@ -254,7 +254,6 @@ function loadFromFragment() {
       // optionally set ip/model inputs
       if (payload.ip) document.getElementById('ip-address').value = payload.ip;
       if (payload.model) document.getElementById('model-name').value = payload.model;
-      renderFullHistory();
     }
   } catch (e) {
     console.error('Failed to load chat from fragment', e);
@@ -332,6 +331,6 @@ if (importBtn && importFileInput) {
 // Render chat history on page load
 document.addEventListener('DOMContentLoaded', () => {
   loadFromFragment();
-  //renderFullHistory(); already done in loadFromFragment
+  renderFullHistory();
 });
 
