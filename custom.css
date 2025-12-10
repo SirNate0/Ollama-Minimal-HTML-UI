@@ -11,7 +11,7 @@ main {
 
 .history {
   padding: 15px;
-  margin: 15px 0;
+  margin: 0 0 15px;
   border-radius: 15px;
 }
 
@@ -49,12 +49,8 @@ body {
 
 h1 {
   margin: 0;
-  padding: 12px 20px;
   background: #0c0c0c;
   color: aliceblue;
-  height: 0px;
-  line-height: 12px;
-  flex-shrink: 0;
 }
 #question-form {
   display: flex;
