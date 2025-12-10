@@ -57,6 +57,17 @@ h1 {
   flex-direction: column;
 }
 
+.history-controls,
+.inline-editor-controls {
+  margin: -10px 0;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.inline-editor-controls {
+  margin-top: 0;
+}
+
 /* Compact icon buttons used in inline editor and per-message controls */
 .history-controls button,
 .inline-editor-controls button {

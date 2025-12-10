@@ -55,7 +55,6 @@ function createEntry(item, idx) {
   // compact controls next to each bubble: Edit (opens inline editor)
   const controls = document.createElement("div");
   controls.classList.add("history-controls");
-  controls.style.marginTop = "6px";
 
   const editBtn = document.createElement("button");
   editBtn.type = "button";
@@ -144,9 +143,6 @@ function startInlineEdit(index, entryEl, contentDiv) {
   // compact control buttons (editor-specific)
   const btnBar = document.createElement('div');
   btnBar.classList.add('inline-editor-controls');
-  btnBar.style.display = 'inline-flex';
-  btnBar.style.gap = '8px';
-  btnBar.style.marginTop = '6px';
 
   const saveBtn = document.createElement('button');
   saveBtn.type = 'button';
