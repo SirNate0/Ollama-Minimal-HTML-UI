@@ -19,11 +19,21 @@ window.chat_history = [
 ];
 
 const historyContainer = document.getElementById("history");
-const chatScroll = document.getElementById("chat-scroll");
+const chatContainer = document.getElementById("chat-container");
 
 function scrollToBottom() {
   try {
-    if (chatScroll) chatScroll.scrollTop = chatScroll.scrollHeight;
+    if (!chatContainer) return;
+    // Prefer scrolling the last message into view so that it is not hidden
+    const last = historyContainer.lastElementChild;
+    if (last) {
+      // Use scrollIntoView with block 'end' to position message above fixed form
+      last.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+      // Also ensure container is scrolled to bottom as a fallback
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    } else {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
   } catch (e) {}
 }
 

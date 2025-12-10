@@ -10,13 +10,14 @@
   <body>
     <h1>Ask a Question</h1>
     <main>
-      <div id="chat-scroll">
+      <div id="chat-container">
         <div id="history"></div>
         <div id="current-response" class="history assistant working"></div>
       </div>
 
-      <div id="error-container"></div>
-      <form id="question-form">
+      <div id="form-container">
+        <div id="error-container"></div>
+        <form id="question-form">
         <div style="display: flex">
           <input type="text" id="ip-address" placeholder="Enter IP Address" />
           <select id="model-dropdown">
@@ -36,6 +37,7 @@
           <button type="button" id="stop-button">Stop</button>
         </div>
       </form>
+      </div>
     </main>
 
     <!-- Load required 3rd-party scripts -->
