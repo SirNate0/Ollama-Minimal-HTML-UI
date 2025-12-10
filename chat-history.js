@@ -176,7 +176,7 @@ function startInlineEdit(index, entryEl, contentDiv) {
 
   const forkBtn = document.createElement('button');
   forkBtn.type = 'button';
-  forkBtn.innerText = '⅄';
+  forkBtn.innerText = '⎇';//'⅄';
   forkBtn.title = 'Fork';
   forkBtn.addEventListener('click', () => {
     // create a fork with the history up through this message (inclusive),
