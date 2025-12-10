@@ -47,9 +47,7 @@ async function doChat({ addUser = false } = {}) {
     assistantIndex = window.chat_history.length;
     window.chat_history.push({ role: "assistant", content: "" });
 
-    assistantEl = document.createElement("div");
-    assistantEl.classList.add("history", "assistant");
-    assistantEl.innerHTML = "";
+    assistantEl = createEntry({ role: "assistant", content: "" }, assistantIndex);
     historyContainer.appendChild(assistantEl);
   } else {
     // continue: find last assistant in history; if none, create one
@@ -63,9 +61,7 @@ async function doChat({ addUser = false } = {}) {
     if (assistantIndex === -1) {
       assistantIndex = window.chat_history.length;
       window.chat_history.push({ role: "assistant", content: "" });
-      assistantEl = document.createElement("div");
-      assistantEl.classList.add("history", "assistant");
-      assistantEl.innerHTML = "";
+      assistantEl = createEntry({ role: "assistant", content: "" }, assistantIndex);
       historyContainer.appendChild(assistantEl);
     } else {
       // find the corresponding DOM element (last .assistant)
@@ -106,14 +102,8 @@ async function doChat({ addUser = false } = {}) {
     const decoder = new TextDecoder("utf-8");
     let accumulatedData = "";
 
-    // Update only the content div, preserving controls and other structure
-    let contentDiv = assistantEl.querySelector('.history-content');
-    if (!contentDiv) {
-      // First time: create the content div if it doesn't exist
-      contentDiv = document.createElement('div');
-      contentDiv.classList.add('history-content');
-      assistantEl.appendChild(contentDiv);
-    }
+    // Get the content div (created by createEntry)
+    const contentDiv = assistantEl.querySelector('.history-content');
 
     while (true) {
       const { done, value } = await reader.read();
