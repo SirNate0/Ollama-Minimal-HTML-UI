@@ -216,17 +216,5 @@ function updateControlsState() {
   }
 }
 
-// Wire up input listeners to keep controls in sync
-document.getElementById('ip-address').addEventListener('input', updateControlsState);
-document.getElementById('model-name').addEventListener('input', updateControlsState);
-const modelDropdown = document.getElementById('model-dropdown');
-if (modelDropdown) {
-  modelDropdown.addEventListener('change', () => {
-    const selected = modelDropdown.value;
-    if (selected) document.getElementById('model-name').value = selected;
-    updateControlsState();
-  });
-}
-
 // Initialize control state on load
 updateControlsState();

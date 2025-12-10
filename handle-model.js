@@ -54,3 +54,15 @@ modelDropdown.addEventListener("change", () => {
     modelInput.value = selectedModel;
   }
 });
+
+
+// Wire up input listeners to keep controls in sync
+//document.getElementById('ip-address').addEventListener('input', updateControlsState);
+//document.getElementById('model-name').addEventListener('input', updateControlsState);
+//const modelDropdown = document.getElementById('model-dropdown');
+
+modelDropdown.addEventListener('change', () => {
+  const selected = modelDropdown.value;
+  if (selected) document.getElementById('model-name').value = selected;
+  updateControlsState();
+});
