@@ -18,13 +18,13 @@
       <div id="form-container">
         <div id="error-container"></div>
         <form id="question-form">
-        <div style="display: flex">
-          <input type="text" id="ip-address" placeholder="Enter IP Address" />
-          <select id="model-dropdown">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="ip-address" placeholder="Enter IP Address" style="flex: 10;" />
+          <select id="model-dropdown" style="flex: 1;">
             <option selected disabled>No model</option>
           </select>
+          <input type="text" id="model-name" placeholder="Model Name" style="flex: 4;" />
         </div>
-        <input type="text" id="model-name" placeholder="Enter Model Name" />
         <textarea
           rows="4"
           cols="50"
