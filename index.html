@@ -35,7 +35,7 @@
     <!-- Load required 3rd-party scripts -->
 <!--     <script type="module" src="./external/markdown-it.js"></script> -->
 <!--     <script type="module" src="./external/markdown-it-katex.js"></script> -->
-<!-- <script type="module"> import markdownItKatex from 'https://cdn.jsdelivr.net/npm/markdown-it-katex@2.0.3/+esm'; window.markdownItKatex=markdownItKatex; </script> -->
+ 
 <!--   <script src="./external/markdown-it-mathjax3.js" /> -->
     <script src="./external/highlight/highlight.min.js"></script>
     <link href="./external/highlight/theme.css" rel="stylesheet" />
@@ -44,12 +44,14 @@
     <!-- Load application scripts -->
 <!--     <script type="module" src="./markdownit-setup.js" defer></script> -->
 <!--     <script src="./external/markdown-it-setup.js"></script> -->
-  <!-- markdown-it via CDN (for demo; you can also host locally) -->
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
-  
-  <!-- Now load the plugin via ES Modules from your local lib/ directory -->
+  <!-- markdown-it loaded locally for offline use -->
+  <script src="./external/markdown-it.min.js"></script>
+
+  <!-- Load KaTeX and the official @mdit/plugin-katex browser build locally -->
+  <script src="./external/katex.min.js"></script>
+
   <script type="module">
-    import { katex } from 'https://cdn.jsdelivr.net/npm/@mdit/plugin-katex/lib/browser.js'; // Main browser entry for the plugin
+    import { katex } from './external/plugin-katex-browser.js'; // Official plugin (local)
     // If you want mhchem support, uncomment the line below:
     // import './lib/mhchem-browser.js';
 
