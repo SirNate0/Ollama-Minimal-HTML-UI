@@ -259,3 +259,71 @@ function loadFromFragment() {
 // initial render/load
 loadFromFragment();
 renderFullHistory();
+
+// Export chat history (and current settings) as JSON file
+function exportChatJSON() {
+  try {
+    const payload = {
+      chat_history: window.chat_history,
+      ip: document.getElementById('ip-address')?.value || '',
+      model: document.getElementById('model-name')?.value || '',
+      exported_at: new Date().toISOString(),
+    };
+
+    const dataStr = JSON.stringify(payload, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-export-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('Failed to export chat: ' + e.message);
+  }
+}
+
+// Import chat history from a JSON file. This replaces the current chat history.
+function importChatJSONFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (ev) {
+    try {
+      const text = ev.target.result;
+      const payload = JSON.parse(text);
+      if (!payload || !payload.chat_history) {
+        alert('Invalid chat file: missing chat_history');
+        return;
+      }
+      // Replace chat history and optionally restore ip/model
+      window.chat_history = payload.chat_history;
+      if (payload.ip) document.getElementById('ip-address').value = payload.ip;
+      if (payload.model) document.getElementById('model-name').value = payload.model;
+      renderFullHistory();
+    } catch (e) {
+      alert('Failed to import chat: ' + e.message);
+    }
+  };
+  reader.onerror = function () {
+    alert('Failed to read file');
+  };
+  reader.readAsText(file);
+}
+
+// Wire up export/import UI if present
+const exportBtn = document.getElementById('export-button');
+if (exportBtn) exportBtn.addEventListener('click', exportChatJSON);
+
+const importBtn = document.getElementById('import-button');
+const importFileInput = document.getElementById('import-file');
+if (importBtn && importFileInput) {
+  importBtn.addEventListener('click', () => importFileInput.click());
+  importFileInput.addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) importChatJSONFile(f);
+    // clear selection so same file can be re-imported if needed
+    importFileInput.value = null;
+  });
+}
