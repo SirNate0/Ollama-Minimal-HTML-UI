@@ -105,10 +105,14 @@ window.addResponse = (itemText, opts = {}) => {
       const assistantEls = historyContainer.querySelectorAll('.assistant');
       const el = assistantEls[assistantEls.length - 1];
       if (el) {
-        try {
-          el.innerHTML = markdown.render(window.chat_history[lastIdx].content || "");
-        } catch (e) {
-          el.innerText = window.chat_history[lastIdx].content || "";
+        // Find the content div and update only that, preserving controls
+        const contentDiv = el.querySelector('.history-content');
+        if (contentDiv) {
+          try {
+            contentDiv.innerHTML = markdown.render(window.chat_history[lastIdx].content || "");
+          } catch (e) {
+            contentDiv.innerText = window.chat_history[lastIdx].content || "";
+          }
         }
         scrollToBottom();
         return;
