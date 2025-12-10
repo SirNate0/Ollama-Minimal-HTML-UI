@@ -175,8 +175,9 @@ function startInlineEdit(index, entryEl, contentDiv) {
   forkBtn.type = 'button';
   forkBtn.innerText = 'Fork';
   forkBtn.addEventListener('click', () => {
-    // create a fork with current history and settings (including the in-progress edit value)
-    const cloned = JSON.parse(JSON.stringify(window.chat_history));
+    // create a fork with the history up through this message (inclusive),
+    // and include the in-progress edit value. This slices off any messages after this bubble.
+    const cloned = JSON.parse(JSON.stringify(window.chat_history.slice(0, index + 1)));
     cloned[index].content = ta.value;
     createForkFromPayload({ chat_history: cloned, ip: document.getElementById('ip-address')?.value || '', model: document.getElementById('model-name')?.value || '' });
   });
