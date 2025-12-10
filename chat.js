@@ -4,8 +4,11 @@ let currentController = null;
 const submitButton = document.getElementById("submit-button");
 const continueButton = document.getElementById("continue-button");
 const stopButton = document.getElementById("stop-button");
+// We'll no longer use the separate `current-response` bubble for streaming.
 const responseContainer = document.getElementById("current-response");
 const errorContainer = document.getElementById("error-container");
+const historyContainer = document.getElementById("history");
+const chatScroll = document.getElementById("chat-scroll");
 
 async function doChat({ addUser = false } = {}) {
   const ipAddress = document.getElementById("ip-address").value;
@@ -22,10 +25,51 @@ async function doChat({ addUser = false } = {}) {
     window.addQuestion(prompt);
   }
 
-  // reset response area and prepare controller
-  responseContainer.innerHTML = "";
+  // prepare controller and the assistant placeholder
   let answer = "";
   currentController = new AbortController();
+  let assistantIndex = -1;
+  let assistantEl = null;
+
+  // If addUser is true, window.addQuestion already pushed the user message.
+  // Create or reuse the last assistant entry as a streaming placeholder.
+  if (addUser) {
+    // create a placeholder assistant entry in the history array and DOM
+    assistantIndex = window.chat_history.length;
+    window.chat_history.push({ role: "assistant", content: "" });
+
+    assistantEl = document.createElement("div");
+    assistantEl.classList.add("history", "assistant");
+    assistantEl.innerHTML = "";
+    historyContainer.appendChild(assistantEl);
+  } else {
+    // continue: find last assistant in history; if none, create one
+    for (let i = window.chat_history.length - 1; i >= 0; i--) {
+      if (window.chat_history[i].role === "assistant") {
+        assistantIndex = i;
+        break;
+      }
+    }
+
+    if (assistantIndex === -1) {
+      assistantIndex = window.chat_history.length;
+      window.chat_history.push({ role: "assistant", content: "" });
+      assistantEl = document.createElement("div");
+      assistantEl.classList.add("history", "assistant");
+      assistantEl.innerHTML = "";
+      historyContainer.appendChild(assistantEl);
+    } else {
+      // find the corresponding DOM element (last .assistant)
+      const els = historyContainer.querySelectorAll('.assistant');
+      assistantEl = els[els.length - 1];
+    }
+  }
+
+  // Ensure the new/updated assistant element is visible
+  try {
+    if (chatScroll) chatScroll.scrollTop = chatScroll.scrollHeight;
+  } catch (e) {}
+
   let aborted = false;
 
   try {
@@ -55,8 +99,8 @@ async function doChat({ addUser = false } = {}) {
         for (const chunk of jsonChunks) {
           if (chunk.trim()) {
             const jsonChunk = JSON.parse(chunk);
-            // Support different shapes: message.content or chunk.text
             const content = jsonChunk?.message?.content ?? jsonChunk?.text ?? "";
+            // Append raw markdown content to `answer` (no HTML concatenation)
             answer += content;
           }
         }
@@ -66,7 +110,23 @@ async function doChat({ addUser = false } = {}) {
         // If parsing fails, wait for more data
       }
 
-      responseContainer.innerHTML = markdown.render(answer);
+      // Update the assistant placeholder's raw content in the chat history and re-render markdown
+      if (assistantIndex !== -1) {
+        window.chat_history[assistantIndex].content = answer;
+        try {
+          assistantEl.innerHTML = markdown.render(answer);
+        } catch (e) {
+          assistantEl.innerText = answer;
+        }
+      } else {
+        // Fallback: show in responseContainer
+        responseContainer.innerHTML = markdown.render(answer);
+      }
+
+      // Keep scroll at bottom while streaming
+      try {
+        if (chatScroll) chatScroll.scrollTop = chatScroll.scrollHeight;
+      } catch (e) {}
     }
   } catch (error) {
     if (error.name === "AbortError") {
@@ -83,15 +143,17 @@ async function doChat({ addUser = false } = {}) {
     continueButton.disabled = false;
     stopButton.disabled = true;
 
-    // If we have any text produced, add as assistant message (partial or full)
-    if (answer && answer.trim().length > 0) {
-      window.addResponse(answer, { append: !addUser });
-    } else if (!aborted) {
-      // nothing produced and not aborted -> do nothing
+    // If nothing produced and not aborted, remove the placeholder
+    if ((!answer || answer.trim().length === 0) && !aborted) {
+      if (assistantIndex !== -1) {
+        // remove from model data and DOM
+        window.chat_history.splice(assistantIndex, 1);
+        if (assistantEl && assistantEl.parentNode) assistantEl.parentNode.removeChild(assistantEl);
+      }
     }
 
-    // clear the live response area (the appended history holds the rendered result)
-    responseContainer.innerHTML = null;
+    // clear the live response container if used
+    if (responseContainer) responseContainer.innerHTML = null;
   }
 }
 

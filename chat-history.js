@@ -58,17 +58,17 @@ window.addResponse = (itemText, opts = {}) => {
     }
 
     if (lastIdx !== -1) {
-      // append to the model data
+      // append raw markdown to the model data
       window.chat_history[lastIdx].content = (window.chat_history[lastIdx].content || "") + itemText;
 
-      // append to the last assistant DOM element
+      // re-render the full markdown for the last assistant DOM element (avoid concatenating rendered HTML)
       const assistantEls = historyContainer.querySelectorAll('.assistant');
       const el = assistantEls[assistantEls.length - 1];
       if (el) {
         try {
-          el.innerHTML = (el.innerHTML || "") + markdown.render(itemText);
+          el.innerHTML = markdown.render(window.chat_history[lastIdx].content || "");
         } catch (e) {
-          el.innerText = (el.innerText || "") + itemText;
+          el.innerText = window.chat_history[lastIdx].content || "";
         }
         scrollToBottom();
         return;
