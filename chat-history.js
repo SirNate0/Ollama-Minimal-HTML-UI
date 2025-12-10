@@ -212,7 +212,13 @@ function startInlineEdit(index, entryEl, contentDiv) {
 // Create a fork URL fragment and open in a new tab
 function createForkFromPayload(payload) {
   try {
-    const encoded = encodeURIComponent(JSON.stringify(payload));
+    // Prefer compact JSON-url encoding if available, otherwise fallback to JSON
+    let encoded;
+    if (window.JsonURL && typeof window.JsonURL.stringify === 'function') {
+      encoded = encodeURIComponent(window.JsonURL.stringify(payload));
+    } else {
+      encoded = encodeURIComponent(JSON.stringify(payload));
+    }
     const url = `${location.pathname}${location.search}#chat=${encoded}`;
     window.open(url, '_blank');
   } catch (e) {
@@ -227,7 +233,17 @@ function loadFromFragment() {
     const m = location.hash.match(/chat=(.*)/);
     if (!m) return;
     const decoded = decodeURIComponent(m[1]);
-    const payload = JSON.parse(decoded);
+    let payload;
+    if (window.JsonURL && typeof window.JsonURL.parse === 'function') {
+      try {
+        payload = window.JsonURL.parse(decoded);
+      } catch (e) {
+        // fall back to JSON.parse
+        payload = JSON.parse(decoded);
+      }
+    } else {
+      payload = JSON.parse(decoded);
+    }
     if (payload?.chat_history) {
       window.chat_history = payload.chat_history;
       // optionally set ip/model inputs

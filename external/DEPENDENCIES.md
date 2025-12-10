@@ -23,6 +23,11 @@ This file lists the third-party assets saved under `external/` and the version i
   - Version (from file header): `11.11.1`
   - The README mentions highlight.js as the upstream project (no CDN URL was embedded in `index.html`).
 
+- **jsonurl-js**
+  - Local path: `external/jsonurl.min.js`
+  - Version: 1.1.8
+  - Original: https://cdn.jsdelivr.net/npm/@jsonurl/jsonurl@1.1.8
+
 Other notes
 - The plugin browser bundle (`external/plugin-katex-browser.js`) imports a small companion module named like `./katex-<hash>.js`. To avoid additional remote fetches, a small adapter `external/katex-BYdhswY7.js` was added which delegates to the globally-loaded KaTeX runtime.
 - If you want every dependency pinned explicitly (for example to include `@mdit/plugin-katex` exact version), I can fetch the precise package version and update this file. Right now, where the original CDN URL lacked an explicit version, this file records the URL and the local filename; the most reliable version strings were taken from file headers or the CSS where present.
