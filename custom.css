@@ -52,6 +52,9 @@ h1 {
   padding: 12px 20px;
   background: #0c0c0c;
   color: aliceblue;
+  height: 24px;
+  line-height: 24px;
+  flex-shrink: 0;
 }
 #question-form {
   display: flex;
@@ -130,7 +133,7 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 48px); /* 100vh minus h1 fixed height (24px + 24px padding) */
   gap: 0;
 }
 
