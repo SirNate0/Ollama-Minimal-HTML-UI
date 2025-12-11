@@ -2,7 +2,7 @@
  * Gets the models from the server and replaces the input box with it if selecting one.
  */
 const sourceInput = document.getElementById("ip-address");
-const modelDropdown = document.getElementById("model-dropdown");
+// const modelDropdown = document.getElementById("model-dropdown");
 const modelInput = document.getElementById("model-name");
 
 /**
@@ -15,7 +15,8 @@ const buildSelectOptions = (modelsArray) => {
     newOption.innerText = `${model.name} (${model.details.parameter_size})`;
     return newOption;
   });
-  modelDropdown.replaceChildren(...newOptionsHtml);
+  modelInput.replaceChildren(...newOptionsHtml);
+  updateControlsState();
 };
 
 /**
@@ -45,24 +46,7 @@ sourceInput.addEventListener("blur", queryAndBuild);
  */
 document.addEventListener("DOMContentLoaded", queryAndBuild);
 
-/**
- * Changes the model input to reflect what you select in the model dropdown
- */
-modelDropdown.addEventListener("change", () => {
-  const selectedModel = modelDropdown.value;
-  if (selectedModel) {
-    modelInput.value = selectedModel;
-  }
-});
-
-
 // Wire up input listeners to keep controls in sync
-//document.getElementById('ip-address').addEventListener('input', updateControlsState);
-//document.getElementById('model-name').addEventListener('input', updateControlsState);
-//const modelDropdown = document.getElementById('model-dropdown');
+document.getElementById('ip-address').addEventListener('input', updateControlsState);
+modelInput.addEventListener('input', updateControlsState);
 
-modelDropdown.addEventListener('change', () => {
-  const selected = modelDropdown.value;
-  if (selected) document.getElementById('model-name').value = selected;
-  updateControlsState();
-});
