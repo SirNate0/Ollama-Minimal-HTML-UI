@@ -219,13 +219,13 @@ function createForkFromPayload(payload) {
   try {
     // Prefer compact JSON-url encoding if available, otherwise fallback to JSON
     let encoded;
+    const base = `${location.pathname}${location.search}`;
     if (window.JsonURL && typeof window.JsonURL.stringify === 'function') {
-      encoded = encodeURIComponent(window.JsonURL.stringify(payload));
+      encoded = encodeURI(base+'#chat='+window.JsonURL.stringify(payload));
     } else {
-      encoded = encodeURIComponent(JSON.stringify(payload));
+      encoded = encodeURI(base+'#chat='+JSON.stringify(payload));
     }
-    const url = `${location.pathname}${location.search}#chat=${encoded}`;
-    window.open(url, '_blank');
+    window.open(encoded, '_blank');
   } catch (e) {
     alert('Failed to create fork: ' + e.message);
   }
@@ -326,6 +326,29 @@ if (importBtn && importFileInput) {
     // clear selection so same file can be re-imported if needed
     importFileInput.value = null;
   });
+}
+
+// Clear chat history without refreshing the page
+function clearChatHistory() {
+  // Reset in-memory history
+  window.chat_history = [];
+
+  // Remove any URL fragment so a forked chat isn't reloaded and no browser history is added
+  // try {
+  //   history.replaceState(null, '', location.pathname + location.search);
+  // } catch (e) {
+  //   try {
+  location.hash = '';
+  //   } catch (e2) {}
+  // }
+
+  // Re-render empty history
+  renderFullHistory();
+}
+
+const clearBtn = document.getElementById('clear-button');
+if (clearBtn) {
+  clearBtn.addEventListener('click', clearChatHistory);
 }
 
 // Render chat history on page load
