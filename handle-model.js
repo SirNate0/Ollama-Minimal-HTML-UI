@@ -5,6 +5,12 @@ const sourceInput = document.getElementById("ip-address");
 // const modelDropdown = document.getElementById("model-dropdown");
 const modelInput = document.getElementById("model-name");
 
+// Wire up form submit to refresh model list
+document.getElementById("settings-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  queryAndBuild();
+});
+
 /**
  * Makes the options from the query
  */
@@ -31,6 +37,15 @@ const queryAndBuild = async () => {
   });
 
   if (!response.ok) {
+    const invalid = "No model";
+    if (modelInput.value != invalid) {
+      const newOption = document.createElement("option");
+      newOption.innerText = "--No models--";
+      newOption.value = invalid
+      newOption.disabled = true;
+      modelInput.replaceChildren(newOption)
+      modelInput.value = invalid
+    }
     return;
   }
 

@@ -126,7 +126,8 @@ button:focus {
 
 input,
 textarea,
-select {
+select,
+#refresh-button {
   background-color: #1e1e1e; /* Dark background color */
   color: #c0c0c0; /* Light text color */
   border: 2px solid #333333; /* Slightly lighter border to create contrast */
@@ -137,7 +138,8 @@ select {
   margin-bottom: 10px; /* Vertical space between inputs */
 }
 
-select {
+select,
+#refresh-button {
   height: 100%;
 }
 

@@ -16,15 +16,19 @@
       </div>
 
       <div id="form-container">
+        <form id="settings-form" >
         <div id="error-container"></div>
-        <form id="question-form">
         <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="text" id="ip-address" placeholder="Enter IP Address" style="flex: 10;" />
-          <select id="model-name" style="flex: 2;">
+          <input type="text" id="ip-address" placeholder="Enter IP Address" style="flex: 100;" />
+          <button type="submit" id="refresh-button" title="Refresh Models" style="flex:1">⟳</button>
+          <!-- 🗘 causes the line height to be much too large -->
+          <select id="model-name" style="flex: 20;">
             <option selected disabled>No model</option>
           </select>
           <!-- <input type="text" id="model-name" placeholder="Model Name" style="flex: 4;" /> -->
         </div>
+        </form>
+        <form id="question-form">
         <textarea
           rows="4"
           cols="50"
